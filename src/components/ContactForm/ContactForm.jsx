@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Form, Label } from './ContactForm.styled';
+import { useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { Form, Label, Button } from './ContactForm.styled';
+import { addContact } from '../contactsSlice';
 
-const ContactForm = ({ onAddContact }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
     number: '',
@@ -17,7 +21,18 @@ const ContactForm = ({ onAddContact }) => {
 
     const { name, number } = formData;
 
-    onAddContact(name, number);
+    if (!name || !number) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    dispatch(addContact(newContact));
 
     setFormData({ name: '', number: '' });
   };
