@@ -32,7 +32,6 @@ const App = () => {
   const filterChangeHandler = value => {
     dispatch(updateFilter(value));
   };
-
   const deleteContactHandler = id => {
     dispatch(removeContact(id));
   };
@@ -46,7 +45,8 @@ const App = () => {
       <h1>Phonebook</h1>
       <ContactForm onAddContact={addContactHandler} />
       <h2>Contacts</h2>
-      <Filter onChange={filterChangeHandler} />
+      {/* Corrected the prop name from 'onChange' to 'filterChangeHandler' */}
+      <Filter filterChangeHandler={filterChangeHandler} />
       <ContactList contacts={filteredContacts} onDeleteContact={deleteContactHandler} />
     </Container>
   );
