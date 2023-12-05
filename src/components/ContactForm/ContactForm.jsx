@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { nanoid } from 'nanoid';
-import { Form, Label, Button } from './ContactForm.styled';
-import { addContact } from '../contactsSlice';
+import { Button, Form, Label } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, setContact } from '../../redux/Contacts/ConactsSlice';
+import { nanoid } from '@reduxjs/toolkit';
 
 const ContactForm = () => {
-  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
     number: '',
   });
+
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -19,20 +21,21 @@ const ContactForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    const { name, number } = formData;
-
-    if (!name || !number) {
-      alert('Please fill in all fields.');
-      return;
-    }
-
-    const newContact = {
+    const newContactTemplate = {
+      name: formData.name,
+      number: formData.number,
       id: nanoid(),
-      name,
-      number,
     };
 
-    dispatch(addContact(newContact));
+    const isInContacts = contacts.some(
+      ({ name }) => name.toLowerCase() === formData.name.toLowerCase()
+    );
+
+    if (isInContacts) {
+      return alert(`${formData.name} is already in contacts`);
+    }
+
+    dispatch(setContact(newContactTemplate));
 
     setFormData({ name: '', number: '' });
   };
