@@ -8,6 +8,7 @@ const persistConfig = {
   storage,
 };
 
+
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
